@@ -20,7 +20,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 
 @SpringBootApplication
 public class DemoApplication {
@@ -49,79 +51,92 @@ RubroRepository rubroRepository;
 	CommandLineRunner init(ClienteRepository clienteRepository, RubroRepository rubroRepository){
 		return args -> {
 			System.out.println("----Funciono----");
-			Cliente cliente1 = new Cliente();
-			cliente1.setNombre("Julieta");
-			cliente1.setApellido("Vicente");
-			cliente1.setTelefono("2616141960");
-			cliente1.setEmail("julietavic@gmail.com");
+			Cliente cliente1 = Cliente.builder()
+					.nombre("Julieta")
+					.apellido("Vicente")
+					.telefono("2616141960")
+					.email("julietavic@gmail.com")
+					.build();
 
-			Domicilio domicilio1 = new Domicilio();
-			domicilio1.setNumero("1198");
-			domicilio1.setCalle("PiedraBuena");
-			domicilio1.setLocalidad("Godoy Cruz");
+			Domicilio domicilio1 = Domicilio.builder()
+					.numero("1198")
+					.calle("PiedraBuena")
+					.localidad("Godoy Cruz")
+					.build();
 
-			Domicilio domicilio2 = new Domicilio();
-			domicilio2.setNumero("2523");
-			domicilio2.setCalle("San Martín");
-			domicilio2.setLocalidad("Mendoza");
+			Domicilio domicilio2 = Domicilio.builder()
+					.numero("2523")
+					.calle("San Martín")
+					.localidad("Mendoza")
+					.build();
 
 			cliente1.agregarDomicilio(domicilio1);
 			cliente1.agregarDomicilio(domicilio2);
 
-			Pedido pedido1 = new Pedido();
-			EstadoPedido INICIADO = pedido1.getEstado();
-			pedido1.setEstado(INICIADO);
-			TipoPedido DELIVERY = pedido1.getEnvio();
-			pedido1.setEnvio(DELIVERY);
-			pedido1.setTotal(3255.30);
+			//configuracion fecha
+			SimpleDateFormat formatoFecha = new SimpleDateFormat ("yyyy-MM-dd");
+			String fechaString = "2023-09-09";
+			// Parsear la cadena en un objeto Date
+			Date fecha = formatoFecha.parse(fechaString);
 
-			Factura factura1= new Factura();
-			factura1.setNumero(1);
-			//factura1.setFecha(2002 / 03 / 06);
-			factura1.setDescuento(0.15);
-			FormaPagoFac EFECTIVO= factura1.getFormaPago();
-			factura1.setFormaPago(EFECTIVO);
-			 int tot= (int) (pedido1.getTotal()*factura1.getDescuento());
-			factura1.setTotal(tot);
+			Pedido pedido1 = Pedido.builder()
+					.estado(EstadoPedido.PREPARACION)
+					.envio(TipoPedido.DELIVERY)
+					.fecha(fecha)
+					.total(3255.30)
+					.build();
+
+
+			Factura factura1= Factura.builder()
+					.numero(1)
+					.fecha(fecha)
+					.descuento(0.15)
+					.formaPago(FormaPagoFac.EFECTIVO)
+					.total(3530)
+					.build();
 			pedido1.setFactura(factura1);
 
-			Rubro rubro01 = new Rubro();
-			rubro01.setDenominacion("Guarnición");
-			Producto producto1 = new Producto();
-			producto1.setReceta("Papas hervidas y freidas con aceite de girasol");
-			producto1.setDenominacion("Papas Fritas");
-			producto1.setPrecioVenta(20.3);
-			producto1.setPrecioCompra(13.50);
-			producto1.setTiempoEstimadoCocina(20);
-			producto1.setUnidadVencida("No");
-			producto1.setStockActual(10);
-			producto1.setStockMinimo(3);
-			producto1.setTipo(TipoProducto.MANOFACTURADO);
+			Rubro rubro01 = Rubro.builder()
+					.denominacion("Guarnición")
+					.build();
+			Producto producto1 = Producto.builder()
+					.receta("Papas hervidas y freidas con aceite de girasol")
+					.denominacion("Papas Fritas")
+					.precioVenta(20.3)
+					.precioCompra(13.50)
+					.tiempoEstimadoCocina(20)
+					.unidadVencida("No")
+					.stockActual(10)
+					.stockMinimo(3)
+					.tipo(TipoProducto.MANOFACTURADO)
+					.build();
 			rubro01.setProductos2(Collections.singletonList(producto1));
 
-			Rubro rubro02 = new Rubro();
-			rubro02.setDenominacion("Principal");
-			Producto producto2 = new Producto();
-			producto2.setReceta("Carne asada con pan, tomates, lechuga y aderesos");
-			producto2.setDenominacion("Hamburguesa1");
-			producto2.setPrecioVenta(1209);
-			producto2.setPrecioCompra(600);
-			producto2.setTiempoEstimadoCocina(30);
-			producto2.setUnidadVencida("No");
-			producto2.setStockActual(10);
-			producto2.setStockMinimo(3);
-			producto2.setTipo(TipoProducto.MANOFACTURADO);
+			Rubro rubro02 = Rubro.builder()
+					.denominacion("Principal")
+					.build();
+			Producto producto2 = Producto.builder()
+					.receta("Carne asada con pan, tomates, lechuga y aderesos")
+					.denominacion("Hamburguesa1")
+					.precioVenta(1209)
+					.precioCompra(600)
+					.tiempoEstimadoCocina(30)
+					.unidadVencida("No")
+					.stockActual(10)
+					.stockMinimo(3)
+					.tipo(TipoProducto.MANOFACTURADO)
+					.build();
 			rubro02.setProductos2(Collections.singletonList(producto2));
 
-			DetallePedido detalle1= new DetallePedido();
-			detalle1.setCantidad(5);
-			double sub1 = (double) (producto1.getPrecioVenta()*detalle1.getCantidad());
-			detalle1.setSubtotal(sub1);
+			DetallePedido detalle1= DetallePedido.builder()
+					.cantidad(5)
+					.subtotal(1000)
+					.build();
 
-			DetallePedido detalle2 = new DetallePedido();
-			detalle1.setCantidad(2);
-			double sub2 = (double) (producto2.getPrecioVenta()*detalle2.getCantidad());
-			detalle1.setSubtotal(sub2);
+			DetallePedido detalle2 = DetallePedido.builder()
+					.cantidad(2)
+					.subtotal(2500)
+					.build();
 
 			pedido1.agregarDetalles(detalle1);
 			pedido1.agregarDetalles(detalle2);
