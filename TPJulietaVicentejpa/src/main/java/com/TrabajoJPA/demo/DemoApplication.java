@@ -96,8 +96,7 @@ RubroRepository rubroRepository;
 			producto1.setUnidadVencida("No");
 			producto1.setStockActual(10);
 			producto1.setStockMinimo(3);
-			TipoProducto INSUMO = producto1.getTipo();
-			producto1.setTipo(INSUMO);
+			producto1.setTipo(TipoProducto.MANOFACTURADO);
 			rubro01.setProductos2(Collections.singletonList(producto1));
 
 			Rubro rubro02 = new Rubro();
@@ -111,7 +110,7 @@ RubroRepository rubroRepository;
 			producto2.setUnidadVencida("No");
 			producto2.setStockActual(10);
 			producto2.setStockMinimo(3);
-			producto2.setTipo(INSUMO);
+			producto2.setTipo(TipoProducto.MANOFACTURADO);
 			rubro02.setProductos2(Collections.singletonList(producto2));
 
 			DetallePedido detalle1= new DetallePedido();

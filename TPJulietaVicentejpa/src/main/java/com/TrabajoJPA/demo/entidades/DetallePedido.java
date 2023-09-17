@@ -35,21 +35,7 @@ private  double subtotal;
         this.subtotal = subtotal;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JoinColumn(name="producto_id")
-    @Builder.Default
-    private List<Producto> productos = new ArrayList<>();
-    public void agregarProducto(Producto ped){
-        productos.add(ped);
-    }
-    public void mostrarProductos() {
-        System.out.println("Productos de: " + DetallePedido.this);
-        for (Producto producto : productos) {
-            System.out.println("Tipo: " + producto.getTipo() + ", Tiempo Estimado de Cosina: " + producto.getTiempoEstimadoCocina());
-            System.out.println("Denominación: " + producto.getDenominacion() + ", Precio de Venta: " + producto.getPrecioVenta() + ", Precio de Compra: " + producto.getPrecioCompra());
-            System.out.println("Stock Actual: " + producto.getStockActual() + ", Stock Mínimo: " + producto.getStockMinimo());
-            System.out.println("Producto Vencida: " + producto.getUnidadVencida() + ", Receta: " + producto.getReceta());
-        }
-
-    }
+    @ManyToOne()
+    @JoinColumn(name = "producto-id")
+    private Producto producto;
 }
